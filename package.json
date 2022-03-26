@@ -40,13 +40,11 @@
         "webpack-shell-plugin-next": "^2.2.2"
     },
     "dependencies": {
-        "@ashthornton/asscroll": "^2.0.5",
         "core-js": "^3.6.4",
         "css-loader": "^3.4.2",
         "dat.gui": "^0.7.9",
         "fontfaceobserver": "^2.1.0",
         "gsap": "^3.9.1",
-        "imagesloaded": "^5.0.0",
         "lazyload": "^2.0.0-rc.2",
         "three": "^0.138.3"
     }

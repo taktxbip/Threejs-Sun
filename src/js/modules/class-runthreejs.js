@@ -1,17 +1,19 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import imagesLoaded from 'imagesloaded';
-import ASScroll from '@ashthornton/asscroll';
 
 // Shaders
-import fragment from '../shaders/fragment.glsl';
 import vertex from '../shaders/vertex.glsl';
+import fragment from '../shaders/fragment.glsl';
 
-import fragmentSun from '../shaders/fragment-sun.glsl';
 import vertexSun from '../shaders/vertex-sun.glsl';
+import fragmentSun from '../shaders/fragment-sun.glsl';
+
+import vertexGlow from '../shaders/vertex-glow.glsl';
+import fragmentGlow from '../shaders/fragment-glow.glsl';
 
 import simplexNoise from '../shaders/simplex-noise.glsl';
 import fresnel from '../shaders/fresnel.glsl';
+
+
 
 class RunThreeJs {
     constructor(options) {
@@ -38,8 +40,6 @@ class RunThreeJs {
 
         this.dom.appendChild(this.renderer.domElement);
 
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-
         this.addTexture();
         this.addGlow();
         this.addObjects();
@@ -49,20 +49,19 @@ class RunThreeJs {
     }
 
     addGlow() {
-        this.materialSun = new THREE.ShaderMaterial({
+        this.materialGlow = new THREE.ShaderMaterial({
             uniforms: {
-                time: { value: 0 },
-                uPerlin: { value: null }
+                time: { value: 0 }
             },
-            side: THREE.DoubleSide,
-            vertexShader: vertexSun,
-            fragmentShader: fresnel + ' ' + fragmentSun
+            side: THREE.BackSide,
+            vertexShader: vertexGlow,
+            fragmentShader: fragmentGlow
         });
 
-        this.geometrySun = new THREE.SphereBufferGeometry(1, this.segments, this.segments);
-        this.meshSun = new THREE.Mesh(this.geometrySun, this.materialSun);
-        this.meshSun.scale.set(300, 300, 300);
-        this.scene.add(this.meshSun);
+        this.geometryGlow = new THREE.SphereBufferGeometry(1, this.segments, this.segments);
+        this.meshGlow = new THREE.Mesh(this.geometryGlow, this.materialGlow);
+        this.meshGlow.scale.set(350, 350, 350);
+        this.scene.add(this.meshGlow);
     }
 
     updateCameraFOV() {
@@ -70,7 +69,7 @@ class RunThreeJs {
     }
 
     addTexture() {
-        this.cubeRenderTarget = new THREE.WebGLCubeRenderTarget(512, {
+        this.cubeRenderTarget = new THREE.WebGLCubeRenderTarget(1024, {
             generateMipmaps: true,
             minFilter: THREE.LinearMipmapLinearFilter
         });
@@ -134,10 +133,6 @@ class RunThreeJs {
     render() {
         this.time += 0.05;
 
-        // this.meshSun.rotation.x = this.time * 0.001;
-        // this.meshSun.rotation.y = this.time * 0.005;
-        // this.meshSun.rotation.z = this.time * 0.002;
-
         this.materialPerlin.uniforms.time.value = this.time;
         this.materialSun.uniforms.time.value = this.time;
 
@@ -146,8 +141,6 @@ class RunThreeJs {
 
         this.renderer.render(this.scene, this.camera);
 
-        // For postprocess use
-        // this.composer.render(this.scene, this.camera);
         window.requestAnimationFrame(this.render.bind(this));
     }
 }

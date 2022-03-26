@@ -5,7 +5,7 @@ varying vec2 vUv;
 varying vec3 vPosition;
 
 float fbm(vec4 p) {
-    int iterations = 6;
+    int iterations = 7;
 
     float amp = 1.;
     float scale = 1.;
