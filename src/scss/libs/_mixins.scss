@@ -1,0 +1,113 @@
+@use "sass:math";
+
+%clearfix {
+    &:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+}
+
+@function max($numbers...) {
+    @return m#{a}x(#{$numbers});
+}
+
+@function min($numbers...) {
+    @return m#{i}n(#{$numbers});
+}
+
+@function rem($size) {
+    $remSize: math.div($size, get('font.size'));
+    //Default font size on html element is 100%, equivalent to 16px;
+    @return #{$remSize}rem;
+}
+
+
+/* mixin for multiline */
+
+@mixin mElipsis($lineHeight: 1.2em, $lineCount: 1) {
+    overflow: hidden;
+    line-height: $lineHeight;
+    max-height: $lineHeight * $lineCount;
+    text-align: left;
+    margin-right: -1em;
+    padding-right: 1em;
+}
+
+
+/* mixin for center both h and v */
+
+@mixin cvh() {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* mixin for center v */
+
+@mixin cv() {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+
+/* Stretch Absolute */
+
+@mixin abstretch() {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+
+/* Site specific mixins */
+
+@mixin gradientListingCard() {
+    &:after {
+        content: '';
+        pointer-events: none;
+        transition: get('transition');
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        z-index: 1;
+        opacity: 0;
+        background: linear-gradient(180deg, rgba(13, 24, 77, 0) 80.46%, rgba(13, 24, 77, 0.65) 100%);
+    }
+}
+
+@mixin cards-horizontal {
+    padding: 0 8px;
+}
+
+@mixin champ_subscribe {
+    .the_champ_login_container {
+        margin-right: 10px;
+        .theChampLogin {
+            background-color: #fff;
+            box-shadow: 0px 0px 30px rgba(20, 26, 51, 0.08);
+            border-radius: 4px;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .champ_subscribe {
+            width: 20px;
+            height: 16px;
+            margin: auto;
+            i {
+                display: none;
+            }
+        }
+    }
+}

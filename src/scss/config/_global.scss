@@ -1,0 +1,29 @@
+html {
+    scroll-behavior: auto !important;
+}
+
+body {
+    font-size: 16px;
+    overflow-x: hidden;
+    font-family: 'Coustard', serif;
+    font-weight: 400;
+    color: #fff;
+    background: #fff !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+canvas {
+    display: block;
+}

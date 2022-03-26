@@ -1,0 +1,21 @@
+$config: deep-map-merge( 
+    ( 
+        'font': 
+        ( 
+            'family-h': ('Mulish', 'system', sans-serif), 
+            'size': 16px
+        ), 
+        'color': ( 
+            'primary': ( '500': #FDB733,  '400': #F8CD41), 
+        ), 
+        'responsive': (
+            'xs': 340px,
+            'sm': 575px,
+            'md': 767px,
+            'lg': 991px,
+            'xl': 1199px,
+            'xxl': 1399px
+        )
+    ), 
+    $config, true
+);

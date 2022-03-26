@@ -1,0 +1,163 @@
+$config: () !default;
+
+@function deep-map-check ($map, $keys...) {
+  @if type-of($map) != 'map' {
+    @error '1: The argument $map: `#{$map}` is of incorrect type: `#{type-of($map)}`. Type of `Map` is required!';
+  }
+  
+  @each $key in $keys {
+    @if not map-has-key($map, $key) {
+      @return false;
+    }
+    
+    $map: map-get($map, $key);
+  }
+  
+  @return true;
+}
+
+@function deep-map-get ($map, $keys...) {
+  @if type-of($map) != 'map' {
+    @error '2: The argument $map: `#{$map}` is of incorrect type: `#{type-of($map)}`. Type of `Map` is required!';
+  }
+  @each $key in $keys {
+    $map: map-get($map, $key);
+  }
+  
+  @return $map;
+}
+
+@function deep-map-merge ($map, $maps...) {
+  $last: nth($maps, -1);
+  $deep: $last == true;
+  $max: if($deep, length($maps) - 1, length($maps));
+  
+  // Loop through all maps in $maps...
+  @for $i from 1 through $max {
+    // Store current map
+    $current: nth($maps, $i);
+    
+    // If not in deep mode, simply merge current map with map
+    @if not $deep {
+      $map: map-merge($map, $current);
+    }
+    @else {
+      // If in deep mode, loop through all tuples in current map
+      @each $key, $value in $current {
+        
+        // If value is a nested map and same key from map is a nested map as well
+        @if type-of($value) == 'map' and type-of(map-get($map, $key)) == 'map' {
+          // Recursive extend
+          $value: deep-map-merge(map-get($map, $key), $value, true);
+        }
+        
+        // Merge current tuple with map
+        $map: map-merge($map, ($key: $value));
+      }
+    }
+  }
+  
+  @return $map;
+}
+
+@function get ($key, $map: $config) {
+  $keys: str-explode($key, '.');
+  @if not deep-map-check($map, $keys...) {
+    @debug $keys;
+    @error '3: The argument $map: `#{$map}` doesn\'t has some of the $keys: `#{$keys}`!';
+  }
+  @return deep-map-get($map, $keys...);
+}
+
+
+@function str-explode ($string, $delimiter: '') {
+    @if type-of($string) != 'string' {
+      @error 'The argument $string: `#{$string}` is of incorrect type: `#{type-of($string)}`. Type of `String` is required!';
+    }
+    @else if type-of($delimiter) != 'string' {
+      @error 'The argument $string: `#{$string}` is of incorrect type: `#{type-of($string)}`. Type of `String` is required!';
+    }
+    
+    $result: ();
+    $running: true;
+    
+    @if str-length($delimiter) == 0 {
+      @for $i from 1 through str-length($string) {
+        $result: append($result, str-slice($string, $i, $i));
+      }
+      
+      @return $result;
+    }
+    
+    @while $running {
+      $index: str-index($string, $delimiter);
+      
+      @if $index != null {
+        $item: str-slice($string, 1, ($index - 1));
+        $result: append($result, $item);
+        $string: str-slice($string, ($index + str-length($delimiter)));
+      }
+      @else {
+        $running: false;
+      }
+    }
+    
+    @return append($result, $string);
+  }
+  
+  @function str-replace ($string, $search, $replace: '') {
+    @if type-of($string) != 'string' {
+      @error 'The argument $string: `#{$string}` is of incorrect type: `#{type-of($string)}`. Type of `String` is required!';
+    }
+    @else if type-of($search) != 'string' {
+      @error 'The argument $search: `#{$search}` is of incorrect type: `#{type-of($search)}`. Type of `String` is required!';
+    }
+    @else if type-of($replace) != 'string' {
+      @error 'The argument $search: `#{$search}` is of incorrect type: `#{type-of($search)}`. Type of `String` is required!';
+    }
+    
+    $index: str-index($string, $search);
+    
+    @if $index {
+      @return str-slice($string, 1, $index - 1) + $replace +
+        str-replace(
+          str-slice($string, $index + str-length($search)),
+          $search, $replace
+        );
+    }
+    
+    @return $string;
+  }
+  
+  @function str-capitalize ($string) {
+    @if type-of($string) != 'string' {
+      @error 'The argument $string: `#{$string}` is of incorrect type: `#{type-of($string)}`. Type of `String` is required!';
+    }
+    
+    @return to-upper-case(str-slice($string, 1, 1)) + str-slice($string, 2);
+  }
+  
+  @function strip-unit ($number) {
+    @if type-of($number) != 'number' {
+      @error 'The argument $number: `#{$number}` is of incorrect type: `#{type-of($number)}`. Type of `Number` is required!';
+    }
+    @else if unitless($number) {
+      @warn 'The argument $number: `#{$number}` has no unit. Unit is required!';
+    }
+    
+    @return $number / ($number * 0 + 1);
+  }
+  
+  @function fix-precision ($number, $digits: 6) {
+    $n: 1;
+    
+    @for $i from 1 through $digits {
+      $n: $n * 10;
+    }
+    
+    @return floor($number * $n) / $n;
+  }
+  
+  @function ratio($w, $h) {
+    @return ($w/$h) + 1px;
+  }

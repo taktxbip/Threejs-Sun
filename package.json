@@ -1,0 +1,53 @@
+{
+    "name": "plain-html-webpack",
+    "version": "1.0.0",
+    "description": "Plain HTML Webpack",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack-dev-server --mode development",
+        "build": "webpack --mode production"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/taktxbip/react-custom-build.git"
+    },
+    "author": "evnomad",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/taktxbip/react-custom-build/issues"
+    },
+    "homepage": "https://github.com/taktxbip/react-custom-build#readme",
+    "devDependencies": {
+        "@babel/core": "^7.16.0",
+        "@babel/preset-env": "^7.16.4",
+        "autoprefixer": "^9.0.0",
+        "babel-loader": "^8.2.3",
+        "clean-webpack-plugin": "^4.0.0",
+        "file-loader": "^6.2.0",
+        "html-loader": "^3.0.1",
+        "html-webpack-plugin": "^5.5.0",
+        "jshint": "^2.13.1",
+        "mini-css-extract-plugin": "^2.4.5",
+        "postcss": "^8.4.4",
+        "postcss-loader": "^6.2.1",
+        "raw-loader": "^4.0.2",
+        "sass": "^1.44.0",
+        "sass-loader": "^12.3.0",
+        "style-loader": "^3.3.1",
+        "webpack": "^5.64.4",
+        "webpack-cli": "^4.9.1",
+        "webpack-dev-server": "^4.6.0",
+        "webpack-shell-plugin-next": "^2.2.2"
+    },
+    "dependencies": {
+        "@ashthornton/asscroll": "^2.0.5",
+        "core-js": "^3.6.4",
+        "css-loader": "^3.4.2",
+        "dat.gui": "^0.7.9",
+        "fontfaceobserver": "^2.1.0",
+        "gsap": "^3.9.1",
+        "imagesloaded": "^5.0.0",
+        "lazyload": "^2.0.0-rc.2",
+        "three": "^0.138.3"
+    }
+}
